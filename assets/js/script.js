@@ -81,6 +81,8 @@ var forecast = function () {
           var fiveDayEl = document.createElement("div");
           fiveDayEl.classList.add("card");
           fiveDayEl.classList.add("col-2")
+          fiveDayEl.classList.add("fiveday")
+
           var fiveDayTempEl = document.createElement("div");
           fiveDayTempEl.innerHTML = "Temp: " + data.daily[i].temp.day + "  F";
           fiveDayEl.appendChild(fiveDayTempEl);
