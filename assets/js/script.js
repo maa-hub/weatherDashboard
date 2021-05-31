@@ -36,14 +36,13 @@ var getCityWeather = function (city) {
     citySearchTerm.innerHTML = city;
     currentDate.innerHTML = "(" + moment().format('l') + ") ☁️";
 
+    // obtain lat and lon data from api
     lat=data.coord.lat;
     lon=data.coord.lon;
     
     getCurrentWeather(lon, lat)
     // displayCity(data, city);
-
   })
-
 }
 
 // search function
@@ -55,10 +54,13 @@ console.log(cityname);
   if (cityname) {
     getCityWeather(cityname);
     nameCityEl.value = "";
+
+    localStorage.setItem("city", JSON.stringify(cityname));
   } else {
     alert("Please enter a Required City Name");
   }
   console.log(event);
+  JSON.parse(localStorage.getItem(cityname))
 }
 
 // fetch function to obtain uv index 
@@ -117,5 +119,6 @@ var forecast = function () {
     }
   })
 };
+
 // event listener for search function
 userFormEl.addEventListener("submit", formSubmitHandler);
