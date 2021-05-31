@@ -1,3 +1,4 @@
+// pick up HTML  variables
 var userFormEl = document.querySelector("#user-form");
 var nameCityEl = document.querySelector("#city");
 var cityContainerEl = document.querySelector("#city-container");
@@ -12,11 +13,12 @@ var lat;
 var lon;
 var apiKey = "7c50bb9f233d432bdcfb028d809dd667"
 
+// weather fetch function with city input
 var getCityWeather = function (city) {
   // format the github api url
   var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
 
-  // make a request to the url
+  // api fetch with lat and lon input 
   fetch(apiUrl).then(function (response) {
     if (response.ok) {
       return response.json()
@@ -25,6 +27,7 @@ var getCityWeather = function (city) {
       alert("Error: City Not Found");
         }
   })
+  // to obtain temp, wind and humidity from api
   .then(function(data){
     console.log(data);
     temp.textContent = "Temp:  " + Math.floor(data.main.temp)+ " F";
@@ -43,6 +46,7 @@ var getCityWeather = function (city) {
 
 }
 
+// search function
 var formSubmitHandler = function (event) {
   event.preventDefault();
   //get value from input element
@@ -57,6 +61,7 @@ console.log(cityname);
   console.log(event);
 }
 
+// fetch function to obtain uv index 
 var getCurrentWeather = function (lat, lon) {
   var apiUrl1 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey;
   fetch(apiUrl1).then(function (response) {
@@ -70,6 +75,7 @@ var getCurrentWeather = function (lat, lon) {
   forecast();
 };
 
+// fetch function to obtain five day forecast api 
 var forecast = function () {
   var apiUrl2 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + apiKey;
   fetch(apiUrl2).then(function (response) {
@@ -83,18 +89,27 @@ var forecast = function () {
           fiveDayEl.classList.add("col-2")
           fiveDayEl.classList.add("fiveday")
 
+          // creating date div and appending to eavh daily forecast div
+          var fiveDayTitle = document.createElement("div");
+          fiveDayTitle.textContent = moment().add(1+i,'days').format("l") + "🌤"; 
+          fiveDayEl.appendChild(fiveDayTitle);
+          
+          // creating temp div and appending to eavh daily forecast div
           var fiveDayTempEl = document.createElement("div");
           fiveDayTempEl.innerHTML = "Temp: " + data.daily[i].temp.day + "  F";
           fiveDayEl.appendChild(fiveDayTempEl);
   
+          // creating humidity div and appending to eavh daily forecast div
           var fiveDayHumidEl = document.createElement("div");
           fiveDayHumidEl.innerHTML = "Humidity:  " + data.daily[i].humidity + "  %";
           fiveDayEl.appendChild(fiveDayHumidEl);
 
+          // creating wind speed div and appending to eavh daily forecast div
           var fiveDayWindEl = document.createElement("div");
           fiveDayWindEl.innerHTML = "Wind Speed:  " + data.daily[i].wind_speed+ "  MPH";
           fiveDayEl.appendChild(fiveDayWindEl);
-          
+
+          // appending each daily forecast div into the main div on HTML
           fiveDay.append(fiveDayEl);
         }
         
@@ -102,7 +117,5 @@ var forecast = function () {
     }
   })
 };
-
-
-
+// event listener for search function
 userFormEl.addEventListener("submit", formSubmitHandler);
